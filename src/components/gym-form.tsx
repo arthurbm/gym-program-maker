@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCompletion } from "ai/react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -31,6 +32,15 @@ export function GymForm() {
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
+
+  const {
+    completion,
+    input,
+    stop,
+    isLoading,
+    handleInputChange,
+    handleSubmit: handleSubmitCompletion,
+  } = useCompletion();
 
   const onSubmit = (data: FormData) => {
     console.log(data);
@@ -62,7 +72,7 @@ export function GymForm() {
           )}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="objectives">Objetivos do Usuário</Label>
+          <Label htmlFor="objectives">Objetivos</Label>
           <Input
             id="objectives"
             placeholder="Descreva seus objetivos"
@@ -94,7 +104,7 @@ export function GymForm() {
         </div>
         <div className="space-y-2">
           <Label htmlFor="equipment">Equipamento Disponível</Label>
-          <Input
+          <Textarea
             id="equipment"
             placeholder="Lista de equipamentos disponíveis"
             required
