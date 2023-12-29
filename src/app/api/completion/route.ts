@@ -13,13 +13,20 @@ export async function POST(req: Request) {
   // Ask Google Generative AI for a streaming completion given the prompt
   const response = await genAI
     .getGenerativeModel({ model: 'gemini-pro' })
-    .generateContentStream({
+    .generateContent({
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
     });
 
+  const result = response.response.text()
   // Convert the response into a friendly text-stream
-  const stream = GoogleGenerativeAIStream(response);
+  // const stream = GoogleGenerativeAIStream(response);
 
-  // Respond with the stream
-  return new StreamingTextResponse(stream);
+  // // Respond with the stream
+  // return new StreamingTextResponse(stream);
+
+  return new Response(result, {
+    headers: {
+      'content-type': 'text/plain',
+    },
+  });
 }
